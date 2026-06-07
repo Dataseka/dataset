@@ -34,12 +34,8 @@ def _(mo):
     ### Add imports
 
     We need to bring in Polars for data manipulation, Plotly for visualisations, and our custom ingestion and transformation modules.
-    """)
-    return
 
-
-@app.cell
-def _():
+    ```python
     import polars as pl
     import polars.selectors as cs
     import plotly.express as px
@@ -48,7 +44,9 @@ def _():
     from transformations import cpi as cpi_transformations
 
     DATA_FOLDER = "./data"
-    return DATA_FOLDER, cpi_ingestion, cpi_transformations, pl
+    ```
+    """)
+    return
 
 
 @app.cell(hide_code=True)
@@ -59,12 +57,8 @@ def _(mo):
     Here we define the target list of Stats SA release files and dynamically construct their download URLs. The pipeline then loops through the list and asynchronously fetches the ZIP files, saving them to our local data directory without freezing the notebook.
 
     **💡 Future Improvement:** The filenames currently contain hardcoded release dates (e.g., `202604`). To make this pipeline fully automated, a future iteration should dynamically get the data from the StatsSA website.
-    """)
-    return
 
-
-@app.cell
-async def _(cpi_ingestion):
+    ```python
     filenames = [
         "P0141 - CPI(COICOP) from Jan 2008 (202604).zip",
         "P0141 - CPI Average Prices Provinces (202604).zip",
@@ -76,6 +70,8 @@ async def _(cpi_ingestion):
         url = f"https://www.statssa.gov.za/../timeseriesdata/Excel/{filename}"
 
         await cpi_ingestion.download(url=url)
+    ```
+    """)
     return
 
 
@@ -94,19 +90,17 @@ def _(mo):
     mo.md(r"""
     #### 2.1 Average Prices: All Urban Areas
     Processes the granular consumer grocery prices sampled specifically from South African major urban centers.
-    """)
-    return
 
-
-@app.cell
-def _(DATA_FOLDER, cpi_transformations, pl):
+    ```
     avg_prices_all_urban_df = cpi_transformations.transform_avg_prices_all_urban(
         data=pl.read_excel(
             f"{DATA_FOLDER}/cpi-average-prices-all-urban-202604.xlsx",
             infer_schema_length=0
         )
     )
-    return (avg_prices_all_urban_df,)
+    ```
+    """)
+    return
 
 
 @app.cell(hide_code=True)
@@ -114,19 +108,17 @@ def _(mo):
     mo.md(r"""
     #### 2.2 Average Prices: Provinces
     Extracts and standardizes the physical product price data broken down across individual geographic provinces.
-    """)
-    return
 
-
-@app.cell
-def _(DATA_FOLDER, cpi_transformations, pl):
+    ```python
     avg_prices_provinces_df = cpi_transformations.transform_avg_prices_provinces(
         data=pl.read_excel(
             f"{DATA_FOLDER}/cpi-average-prices-provinces-202604.xlsx",
             infer_schema_length=0
         )
     )
-    return (avg_prices_provinces_df,)
+    ```
+    """)
+    return
 
 
 @app.cell(hide_code=True)
@@ -135,19 +127,17 @@ def _(mo):
     #### 2.3 Macro-Economic Indices (COICOP History)
 
     Transforms the historical baseline inflation indices categorized under the international Classification of Individual Consumption by Purpose (COICOP) framework.
-    """)
-    return
 
-
-@app.cell
-def _(DATA_FOLDER, cpi_transformations, pl):
+    ```python
     indices_history_df = cpi_transformations.transform_indices_history(
         data=pl.read_excel(
             f"{DATA_FOLDER}/excel-cpi-coicop-from-january-2008-202604.xlsx",
             infer_schema_length=0
         )
     )
-    return (indices_history_df,)
+    ```
+    """)
+    return
 
 
 @app.cell(hide_code=True)
@@ -155,19 +145,17 @@ def _(mo):
     mo.md(r"""
     ### 2.4 Residential Property Price Index (RPPI)
     Extracts the residential housing market trajectories and real estate index data spanning from 2010 onwards.
-    """)
-    return
 
-
-@app.cell
-def _(DATA_FOLDER, cpi_transformations, pl):
+    ```python
     residential_property_df = cpi_transformations.transform_residential_property(
         data=pl.read_excel(
             f"{DATA_FOLDER}/residential-property-price-indices-2010-to-2026.xlsx",
             infer_schema_length=0
         )
     )
-    return (residential_property_df,)
+    ```
+    """)
+    return
 
 
 @app.cell(hide_code=True)
@@ -176,30 +164,21 @@ def _(mo):
     ### 3. Consolidate and Export Unified Dataset
 
     Now that all four data sources have been converted into our identical target format, we merge them into a single unified table. This master dataset is then exported as a flat CSV file, optimised and ready for immediate ingestion into [Dataseka](https://dataseka.com).
-    """)
-    return
 
-
-@app.cell
-def _(
-    DATA_FOLDER,
-    avg_prices_all_urban_df,
-    avg_prices_provinces_df,
-    indices_history_df,
-    pl,
-    residential_property_df,
-):
+    ```python
     stats_sa_df = pl.concat(
         [
-            avg_prices_all_urban_df, 
-            avg_prices_provinces_df, 
-            indices_history_df, 
+            avg_prices_all_urban_df,
+            avg_prices_provinces_df,
+            indices_history_df,
             residential_property_df
-        ], 
+        ],
         how="vertical"
     )
 
-    stats_sa_df.write_csv(f"{DATA_FOLDER}/south_africa_stats_cpi.csv") 
+    stats_sa_df.write_csv(f"{DATA_FOLDER}/south_africa_stats_cpi.csv")
+    ```
+    """)
     return
 
 
