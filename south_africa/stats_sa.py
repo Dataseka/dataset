@@ -16,7 +16,7 @@ def _(mo):
     mo.md(r"""
     # South African Economic Statistics
 
-    This notebook ingests disparate datasets from StatsSA - including physical consumer prices, macroeconomic indices, and residential property metrics—and transforms them into a single, unified schema to visualise on the [Dataseka](https://www.dataseka.com) platform.
+    This notebook ingests disparate datasets from StatsSA - including physical consumer prices, macroeconomic indices, and residential property metrics - and transforms them into a single, unified schema to visualise on the [Dataseka](https://www.dataseka.com) platform.
 
     The core steps of the data pipeline are:
     1. **Extract:** Fetch the raw data from [StatsSA](https://www.statssa.gov.za/?page_id=1847).
@@ -49,12 +49,12 @@ def _(mo):
     return
 
 
-@app.cell(hide_code=True)
+@app.cell
 def _(mo):
     mo.md(r"""
     ### 1. Ingest Raw Data
 
-    Here we define the target list of Stats SA release files and dynamically construct their download URLs. The pipeline then loops through the list and asynchronously fetches the ZIP files, saving them to our local data directory without freezing the notebook.
+    Here we define the target list of StatsSA release files and dynamically construct their download URLs. The pipeline then loops through the list and asynchronously fetches the ZIP files, saving them to our local data directory without freezing the notebook.
 
     **💡 Future Improvement:** The filenames currently contain hardcoded release dates (e.g., `202604`). To make this pipeline fully automated, a future iteration should dynamically get the data from the StatsSA website.
 
