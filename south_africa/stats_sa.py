@@ -41,7 +41,7 @@ def _(mo):
     import plotly.express as px
 
     from ingestions import cpi as cpi_ingestion
-    from transformations import cpi as cpi_transformations
+    from adapters import cpi as adapters
 
     DATA_FOLDER = "./data"
     ```
@@ -92,7 +92,7 @@ def _(mo):
     Processes the granular consumer grocery prices sampled specifically from South African major urban centers.
 
     ```
-    avg_prices_all_urban_df = cpi_transformations.transform_avg_prices_all_urban(
+    avg_prices_all_urban_df = adapters.transform_avg_prices_all_urban(
         data=pl.read_excel(
             f"{DATA_FOLDER}/cpi-average-prices-all-urban-202604.xlsx",
             infer_schema_length=0
@@ -110,7 +110,7 @@ def _(mo):
     Extracts and standardizes the physical product price data broken down across individual geographic provinces.
 
     ```python
-    avg_prices_provinces_df = cpi_transformations.transform_avg_prices_provinces(
+    avg_prices_provinces_df = adapters.transform_avg_prices_provinces(
         data=pl.read_excel(
             f"{DATA_FOLDER}/cpi-average-prices-provinces-202604.xlsx",
             infer_schema_length=0
@@ -129,7 +129,7 @@ def _(mo):
     Transforms the historical baseline inflation indices categorized under the international Classification of Individual Consumption by Purpose (COICOP) framework.
 
     ```python
-    indices_history_df = cpi_transformations.transform_indices_history(
+    indices_history_df = adapters.transform_indices_history(
         data=pl.read_excel(
             f"{DATA_FOLDER}/excel-cpi-coicop-from-january-2008-202604.xlsx",
             infer_schema_length=0
@@ -147,7 +147,7 @@ def _(mo):
     Extracts the residential housing market trajectories and real estate index data spanning from 2010 onwards.
 
     ```python
-    residential_property_df = cpi_transformations.transform_residential_property(
+    residential_property_df = adapters.transform_residential_property(
         data=pl.read_excel(
             f"{DATA_FOLDER}/residential-property-price-indices-2010-to-2026.xlsx",
             infer_schema_length=0
