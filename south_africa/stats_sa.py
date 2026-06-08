@@ -33,15 +33,14 @@ def _(mo):
     mo.md(r"""
     ### Add imports
 
-    We need to bring in Polars for data manipulation, Plotly for visualisations, and our custom ingestion and transformation modules.
+    We need to bring in Polars for data manipulation, and our custom connectors and adapters modules.
 
     ```python
     import polars as pl
     import polars.selectors as cs
-    import plotly.express as px
 
-    from ingestions import cpi as cpi_ingestion
     from adapters import cpi as adapters
+    from connectors import cpi as connectors
 
     DATA_FOLDER = "./data"
     ```
@@ -69,7 +68,7 @@ def _(mo):
     for filename in filenames:
         url = f"https://www.statssa.gov.za/../timeseriesdata/Excel/{filename}"
 
-        await cpi_ingestion.download(url=url)
+        await connectors.download(url=url)
     ```
     """)
     return
