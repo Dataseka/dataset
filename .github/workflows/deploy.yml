@@ -101,12 +101,27 @@ jobs:
             [ "$filename" = "shared.py" ] && continue
             [ "$filename" = "__init__.py" ] && continue
             name="${filename%.*}"
+          
+            title=$(python3 -c "import sys; print(sys.argv[1].replace('_', ' ').title())" "$name")
+          
+            case "$name" in
+              "gross_domestic_product")
+                desc="Quarterly GDP releases from StatsSA P0441, normalised to the Dataseka target format."
+                ;;
+              "inflation")
+                desc="Monthly CPI and inflation data tracking the cost of living across South Africa."
+                ;;
+              *)
+                desc="Data ingestion, transformation, and visual history tracking for this public indicator."
+                ;;
+            esac
+          
             uv run marimo export html-wasm "$file" -o "_site/${name}" --mode run
             cat >> _site/index.html << CARDEOF
                 <a class="card" href="${name}/index.html">
                   <div class="card-icon">&#9632;</div>
-                  <p class="card-name">${name}</p>
-                  <p class="card-desc"></p>
+                  <p class="card-name">${title}</p>
+                  <p class="card-desc">${desc}</p>
                   <div class="card-footer">
                     <span class="tag">StatsSA</span>
                     <span class="card-arrow">&#8594;</span>
@@ -126,7 +141,6 @@ jobs:
           </body>
           </html>
           HTMLEOF
-
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
