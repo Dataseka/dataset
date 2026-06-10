@@ -25,9 +25,19 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
-      - name: Export notebook
+      - name: Export notebooks
         run: |
-          uv run marimo export html-wasm south_africa/stats_sa.py -o _site --mode run
+          echo "<!DOCTYPE html><html><head><title>Dataseka notebooks</title></head><body><h1>Dataseka notebooks</h1><ul>" > _site/index.html
+          for file in south_africa/*.py; do
+            filename=$(basename "$file")
+            if [ "$filename" = "shared.py" ]; then
+              continue
+            fi
+            name="${filename%.*}"
+            uv run marimo export html-wasm "$file" -o "_site/${name}.html" --mode run
+            echo "<li><a href='${name}.html'>${name}</a></li>" >> _site/index.html
+          done
+          echo "</ul></body></html>" >> _site/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
