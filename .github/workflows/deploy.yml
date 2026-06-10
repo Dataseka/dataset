@@ -36,8 +36,6 @@ jobs:
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <title>Dataseka — Open data notebooks</title>
-          <meta name="description" content="Interactive notebooks exploring South African public datasets.">
-          <link rel="icon" href="https://dataseka.com/favicon.ico">
           <link rel="preconnect" href="https://fonts.googleapis.com">
           <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=swap">
           <style>
@@ -47,7 +45,9 @@ jobs:
             body { font-family: 'Ubuntu', system-ui, sans-serif; color: #1a1a1a; display: flex; flex-direction: column; min-height: 100vh; background: #fff; }
             a { text-decoration: none; color: inherit; }
             nav { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 3rem; border-bottom: 0.5px solid rgba(0,0,0,0.1); }
-            .nav-logo img { height: 26px; width: auto; max-width: 140px; display: block; }
+            .nav-logo { display: flex; align-items: center; gap: 10px; }
+            .nav-logo img { height: 24px; width: auto; display: block; }
+            .nav-name { font-size: 15px; font-weight: 500; color: #1a1a1a; }
             .nav-ext { font-size: 14px; color: #6b7280; display: flex; align-items: center; gap: 5px; }
             .nav-ext:hover { color: #1a1a1a; }
             main { flex: 1; padding: 0 3rem; }
@@ -75,8 +75,9 @@ jobs:
           </head>
           <body>
           <nav>
-            <a href="https://dataseka.com">
+            <a class="nav-logo" href="https://dataseka.com">
               <img src="https://dataseka.com/logo.svg" alt="Dataseka">
+              <span class="nav-name">Dataseka</span>
             </a>
             <a class="nav-ext" href="https://dataseka.com">
               dataseka.com
