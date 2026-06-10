@@ -39,7 +39,7 @@ jobs:
           <link rel="icon" type="image/png" sizes="32x32" href="https://dataseka.com/favicon-32x32.png">
           <link rel="icon" type="image/png" sizes="16x16" href="https://dataseka.com/favicon-16x16.png">
           <link rel="preconnect" href="https://fonts.googleapis.com">
-          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=swap">
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500&display=swap">
           <style>
             *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
             :root { --coral: #FF5A5F; }
@@ -49,23 +49,23 @@ jobs:
             nav { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 3rem; border-bottom: 0.5px solid rgba(0,0,0,0.1); }
             .nav-logo { display: flex; align-items: center; gap: 10px; }
             .nav-logo img { height: 24px; width: auto; display: block; }
-            .nav-name { font-size: 15px; font-weight: 500; color: #1a1a1a; }
+            .nav-name { font-size: 15px; font-weight: 300; color: #1a1a1a; }
             .nav-ext { font-size: 14px; color: #6b7280; display: flex; align-items: center; gap: 5px; }
             .nav-ext:hover { color: #1a1a1a; }
             main { flex: 1; padding: 0 3rem; }
             .hero { padding: 5rem 0 3.5rem; max-width: 560px; }
-            .eyebrow { font-size: 11px; font-weight: 500; color: var(--coral); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
-            h1 { font-size: 32px; font-weight: 500; line-height: 1.25; margin-bottom: 1rem; }
+            .eyebrow { font-size: 11px; font-weight: 300; color: var(--coral); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
+            h1 { font-size: 32px; font-weight: 300; line-height: 1.25; margin-bottom: 1rem; }
             .sub { font-size: 16px; color: #6b7280; line-height: 1.7; }
             .divider { height: 0.5px; background: rgba(0,0,0,0.1); }
             .notebooks { padding: 3.5rem 0 0; }
-            .section-label { font-size: 11px; font-weight: 500; color: #9ca3af; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2rem; }
+            .section-label { font-size: 11px; font-weight: 300; color: #9ca3af; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2rem; }
             .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0; }
             .card { padding: 2rem 1.5rem 2rem 0; display: block; border-bottom: 0.5px solid rgba(0,0,0,0.1); }
             .card:hover .card-name { color: var(--coral); }
             .card:hover .card-arrow { opacity: 1; transform: translateX(3px); }
             .card-icon { width: 40px; height: 40px; border-radius: 10px; background: #fff0f0; display: grid; place-items: center; margin-bottom: 1.5rem; font-size: 18px; }
-            .card-name { font-size: 15px; font-weight: 500; margin-bottom: 6px; transition: color 0.15s; }
+            .card-name { font-size: 15px; font-weight: 300; margin-bottom: 6px; transition: color 0.15s; }
             .card-desc { font-size: 13px; color: #6b7280; line-height: 1.6; }
             .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 1.5rem; }
             .tag { font-size: 11px; color: #9ca3af; }
@@ -104,18 +104,19 @@ jobs:
             [ "$filename" = "__init__.py" ] && continue
             name="${filename%.*}"
           
-            title=$(python3 -c "import sys; print(sys.argv[1].replace('_', ' ').title())" "$name")
-          
             case "$name" in
               "gross_domestic_product")
+                title="Gross Domestic Product (GDP)"
                 desc="Quarterly GDP releases from StatsSA P0441, normalised to the Dataseka target format."
                 icon="💰"
                 ;;
               "inflation")
+                title="Consumer Price Index (CPI)"
                 desc="Monthly CPI and inflation data tracking the cost of living across South Africa."
                 icon="📈"
                 ;;
               *)
+                title=$(python3 -c "import sys; print(sys.argv[1].replace('_', ' ').title())" "$name")
                 desc="Data ingestion, transformation, and visual history tracking for this public indicator."
                 icon="📊"
                 ;;
