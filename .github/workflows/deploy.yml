@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  UV_SYSTEM_PYTHON: 1   # Use system Python with uv package manager
+  UV_SYSTEM_PYTHON: 1
 
 jobs:
   build:
@@ -35,8 +35,8 @@ jobs:
               continue
             fi
             name="${filename%.*}"
-            uv run marimo export html-wasm "$file" -o "_site/${name}.html"
-            echo "<li><a href='${name}.html'>${name}</a></li>" >> _site/index.html
+            uv run marimo export html-wasm "$file" -o "_site/${name}" --mode run
+            echo "<li><a href='${name}/index.html'>${name}</a></li>" >> _site/index.html
           done
           echo "</ul></body></html>" >> _site/index.html
 
