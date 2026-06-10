@@ -45,15 +45,6 @@ def _(mo):
     return
 
 
-@app.cell
-def _():
-    from adapters import gdp as adapters
-    from connectors import gdp as connectors
-
-    DATA_FOLDER = "./south_africa/data"
-    return DATA_FOLDER, adapters, connectors
-
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -78,19 +69,6 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-async def _(connectors):
-    filenames = [
-        "GDP P0441 - GDP Time series Q1 2026.xlsx",
-        "GDP P0441- Q1 2026.xlsx",
-    ]
-
-    for filename in filenames:
-        url = f"https://www.statssa.gov.za/publications/P0441/{filename}"
-        await connectors.download(url=url)
-    return
-
-
-@app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
     ### 2. Transform and Export GDP Data
@@ -103,29 +81,6 @@ def _(mo):
     gdp_df.write_csv(f"{DATA_FOLDER}/south_africa_stats_gdp.csv")
     ```
     """)
-    return
-
-
-@app.cell(hide_code=True)
-def _(DATA_FOLDER, adapters):
-    file = f"{DATA_FOLDER}/gdp-p0441-gdp-time-series-q1-2026.xlsx"
-
-    gdp_df = adapters.transform(file=file)
-    gdp_df.write_csv(f"{DATA_FOLDER}/south_africa_stats_gdp.csv")
-    return (gdp_df,)
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md("""
-    ### 3. Preview Output
-    """)
-    return
-
-
-@app.cell
-def _(gdp_df):
-    gdp_df.head()
     return
 
 
