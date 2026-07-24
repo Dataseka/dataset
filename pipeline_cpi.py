@@ -12,15 +12,16 @@ def _():
     from south_africa.connectors import cpi as connectors
 
     DATA_FOLDER = "./south_africa/data"
-    return DATA_FOLDER, adapters, connectors, pl
+    PERIOD = "202606"
+    return DATA_FOLDER, PERIOD, adapters, connectors, pl
 
 
 @app.cell
-async def _(connectors):
+async def _(PERIOD, connectors):
     filenames = [
-        "P0141 - CPI(COICOP) from Jan 2008 (202605).zip",
-        "P0141 - CPI Average Prices Provinces (202605).zip",
-        "P0141 - CPI Average Prices All urban (202605).zip",
+        f"P0141 - CPI(COICOP) from Jan 2008 ({PERIOD}).zip",
+        f"P0141 - CPI Average Prices Provinces ({PERIOD}).zip",
+        f"P0141 - CPI Average Prices All urban ({PERIOD}).zip",
         "P0160 Residential Property Price Index Report(202601).zip"
     ]
 
@@ -35,7 +36,7 @@ async def _(connectors):
 def _(DATA_FOLDER, adapters, pl):
     avg_prices_all_urban_df = adapters.transform_avg_prices_all_urban(
         data=pl.read_excel(
-            f"{DATA_FOLDER}/cpi-average-prices-all-urban-202605.xlsx",
+            f"{DATA_FOLDER}/cpi-average-prices-all-urban-202606.xlsx",
             infer_schema_length=0
         )
     )
@@ -43,10 +44,10 @@ def _(DATA_FOLDER, adapters, pl):
 
 
 @app.cell
-def _(DATA_FOLDER, adapters, pl):
+def _(DATA_FOLDER, PERIOD, adapters, pl):
     avg_prices_provinces_df = adapters.transform_avg_prices_provinces(
         data=pl.read_excel(
-            f"{DATA_FOLDER}/cpi-average-prices-provinces-202605.xlsx",
+            f"{DATA_FOLDER}/cpi-average-prices-provinces-{PERIOD}.xlsx",
             infer_schema_length=0
         )
     )
@@ -54,10 +55,10 @@ def _(DATA_FOLDER, adapters, pl):
 
 
 @app.cell
-def _(DATA_FOLDER, adapters, pl):
+def _(DATA_FOLDER, PERIOD, adapters, pl):
     indices_history_df = adapters.transform_indices_history(
         data=pl.read_excel(
-            f"{DATA_FOLDER}/excel-cpi-coicop-from-january-2008-202605.xlsx",
+            f"{DATA_FOLDER}/excel-cpi-coicop-from-january-2008-{PERIOD}.xlsx",
             infer_schema_length=0
         )
     )
@@ -65,37 +66,35 @@ def _(DATA_FOLDER, adapters, pl):
 
 
 @app.cell
-def _(DATA_FOLDER, adapters, pl):
+def _(DATA_FOLDER, PERIOD, adapters, pl):
     residential_property_df = adapters.transform_residential_property(
         data=pl.read_excel(
-            f"{DATA_FOLDER}/residential-property-price-indices-2010-to-2026.xlsx",
+            f"{DATA_FOLDER}/residential-property-price-indices-2010-to-{PERIOD}.xlsx",
             infer_schema_length=0
         )
     )
-    return (residential_property_df,)
+    return
 
 
 @app.cell
 def _(
-        DATA_FOLDER,
-        avg_prices_all_urban_df,
-        avg_prices_provinces_df,
-        indices_history_df,
-        pl,
-        residential_property_df,
+    DATA_FOLDER,
+    avg_prices_all_urban_df,
+    avg_prices_provinces_df,
+    indices_history_df,
+    pl,
 ):
     stats_sa_df = pl.concat(
         [
             avg_prices_all_urban_df,
             avg_prices_provinces_df,
             indices_history_df,
-            residential_property_df
+            # residential_property_df
         ],
         how="vertical"
     )
 
-    stats_sa_df.write_csv(f"{DATA_FOLDER}/south_africa_stats_cpi_202605.csv")
-
+    stats_sa_df.write_csv(f"{DATA_FOLDER}/south_africa_stats_cpi_202606.csv")
     return
 
 

@@ -11,4 +11,7 @@ CPI_STANDARD_SCHEMA = [
     "value",
     "unit",
     "quantity",
+    "year",
+    "month",
+    "quarter",
 ]

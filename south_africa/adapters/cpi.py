@@ -39,6 +39,11 @@ def transform_avg_prices_all_urban(data: pl.DataFrame) -> pl.DataFrame:
             pl.col("H08").str.extract(r"^([\d\.]+)").cast(pl.Float64).alias("quantity"),
             pl.col("H08").str.extract(r"^[\d\.]+\s+(.*)$").alias("unit"),
         )
+        .with_columns(
+            pl.col("period").dt.year().alias("year"),
+            pl.col("period").dt.month().alias("month"),
+            pl.col("period").dt.quarter().alias("quarter"),
+        )
         .select(CPI_STANDARD_SCHEMA)
     )
 
@@ -78,6 +83,11 @@ def transform_avg_prices_provinces(data: pl.DataFrame) -> pl.DataFrame:
             .alias("period"),
             pl.col("H08").str.extract(r"^([\d\.]+)").cast(pl.Float64).alias("quantity"),
             pl.col("H08").str.extract(r"^[\d\.]+\s+(.*)$").alias("unit"),
+        )
+        .with_columns(
+            pl.col("period").dt.year().alias("year"),
+            pl.col("period").dt.month().alias("month"),
+            pl.col("period").dt.quarter().alias("quarter"),
         )
         .select(CPI_STANDARD_SCHEMA)
     )
@@ -130,6 +140,11 @@ def transform_indices_history(data: pl.DataFrame) -> pl.DataFrame:
             pl.lit(None, dtype=pl.String).alias("unit"),
             pl.lit(None, dtype=pl.Float64).alias("quantity"),
         )
+        .with_columns(
+            pl.col("period").dt.year().alias("year"),
+            pl.col("period").dt.month().alias("month"),
+            pl.col("period").dt.quarter().alias("quarter"),
+        )
         .select(CPI_STANDARD_SCHEMA)
     )
 
@@ -172,6 +187,11 @@ def transform_residential_property(data: pl.DataFrame) -> pl.DataFrame:
             (
                 pl.col("base_period").str.extract(r"([A-Za-z]{3}\s\d{4})") + " 01"
             ).str.to_date("%b %Y %d"),
+        )
+        .with_columns(
+            pl.col("period").dt.year().alias("year"),
+            pl.col("period").dt.month().alias("month"),
+            pl.col("period").dt.quarter().alias("quarter"),
         )
         .select(CPI_STANDARD_SCHEMA)
     )
