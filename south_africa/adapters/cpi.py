@@ -4,6 +4,27 @@ import polars.selectors as cs
 from south_africa.shared import CPI_STANDARD_SCHEMA
 
 
+def add_yoy_metrics(df: pl.DataFrame) -> pl.DataFrame:
+    partition_cols = [
+        pl.col("catalog_code").str.to_lowercase(),
+        pl.col("data_type").str.to_lowercase(),
+        pl.col("data_name").str.to_lowercase(),
+        pl.col("region").str.to_lowercase(),
+    ]
+    return (
+        df.sort("period")
+        .with_columns(
+            pl.col("value").shift(12).over(partition_cols).alias("prior_value")
+        )
+        .with_columns(
+            pl.when(pl.col("prior_value").is_not_null() & (pl.col("prior_value") != 0))
+            .then((pl.col("value") - pl.col("prior_value")) / pl.col("prior_value"))
+            .otherwise(None)
+            .alias("yoy_percentage_change")
+        )
+    )
+
+
 def transform_avg_prices_all_urban(data: pl.DataFrame) -> pl.DataFrame:
     return (
         data.select(
@@ -44,6 +65,7 @@ def transform_avg_prices_all_urban(data: pl.DataFrame) -> pl.DataFrame:
             pl.col("period").dt.month().alias("month"),
             pl.col("period").dt.quarter().alias("quarter"),
         )
+        .pipe(add_yoy_metrics)
         .select(CPI_STANDARD_SCHEMA)
     )
 
@@ -89,6 +111,7 @@ def transform_avg_prices_provinces(data: pl.DataFrame) -> pl.DataFrame:
             pl.col("period").dt.month().alias("month"),
             pl.col("period").dt.quarter().alias("quarter"),
         )
+        .pipe(add_yoy_metrics)
         .select(CPI_STANDARD_SCHEMA)
     )
 
@@ -145,6 +168,7 @@ def transform_indices_history(data: pl.DataFrame) -> pl.DataFrame:
             pl.col("period").dt.month().alias("month"),
             pl.col("period").dt.quarter().alias("quarter"),
         )
+        .pipe(add_yoy_metrics)
         .select(CPI_STANDARD_SCHEMA)
     )
 
@@ -193,5 +217,6 @@ def transform_residential_property(data: pl.DataFrame) -> pl.DataFrame:
             pl.col("period").dt.month().alias("month"),
             pl.col("period").dt.quarter().alias("quarter"),
         )
+        .pipe(add_yoy_metrics)
         .select(CPI_STANDARD_SCHEMA)
     )

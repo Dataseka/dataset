@@ -9,6 +9,8 @@ CPI_STANDARD_SCHEMA = [
     "period",
     "frequency",
     "value",
+    "prior_value",
+    "yoy_percentage_change",
     "unit",
     "quantity",
     "year",

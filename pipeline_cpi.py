@@ -12,7 +12,7 @@ def _():
     from south_africa.connectors import cpi as connectors
 
     DATA_FOLDER = "./south_africa/data"
-    PERIOD = "202606"
+    PERIOD = "202607"
     return DATA_FOLDER, PERIOD, adapters, connectors, pl
 
 
@@ -33,10 +33,10 @@ async def _(PERIOD, connectors):
 
 
 @app.cell
-def _(DATA_FOLDER, adapters, pl):
+def _(DATA_FOLDER, PERIOD, adapters, pl):
     avg_prices_all_urban_df = adapters.transform_avg_prices_all_urban(
         data=pl.read_excel(
-            f"{DATA_FOLDER}/cpi-average-prices-all-urban-202606.xlsx",
+            f"{DATA_FOLDER}/cpi-average-prices-all-urban-{PERIOD}.xlsx",
             infer_schema_length=0
         )
     )
@@ -79,6 +79,7 @@ def _(DATA_FOLDER, PERIOD, adapters, pl):
 @app.cell
 def _(
     DATA_FOLDER,
+    PERIOD,
     avg_prices_all_urban_df,
     avg_prices_provinces_df,
     indices_history_df,
@@ -94,7 +95,13 @@ def _(
         how="vertical"
     )
 
-    stats_sa_df.write_csv(f"{DATA_FOLDER}/south_africa_stats_cpi_202606.csv")
+    stats_sa_df.write_csv(f"{DATA_FOLDER}/south_africa_stats_cpi_{PERIOD}.csv")
+    return (stats_sa_df,)
+
+
+@app.cell
+def _(stats_sa_df):
+    stats_sa_df.head()
     return
 
 
