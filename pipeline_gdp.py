@@ -18,8 +18,8 @@ def _():
 @app.cell
 async def _(connectors):
     filenames = [
-        "GDP P0441 - GDP Time series Q1 2026.xlsx",
-        "GDP P0441- Q1 2026.xlsx",
+        "GDP P0441 - GDP Time series Q2 2026.xlsx",
+        "GDP P0441- Q2 2026.xlsx",
     ]
 
     for filename in filenames:
@@ -30,9 +30,9 @@ async def _(connectors):
 
 @app.cell
 def _(DATA_FOLDER, adapters):
-    file = f"{DATA_FOLDER}/gdp-p0441-gdp-time-series-q1-2026.xlsx"
+    file = f"{DATA_FOLDER}/gdp-p0441-gdp-time-series-q2-2026.xlsx"
     gdp_df = adapters.transform(file=file)
-    gdp_df.write_csv(f"{DATA_FOLDER}/south_africa_stats_gdp_q1.csv")
+    gdp_df.write_csv(f"{DATA_FOLDER}/south_africa_stats_gdp_q2.csv")
     return (gdp_df,)
 
 
